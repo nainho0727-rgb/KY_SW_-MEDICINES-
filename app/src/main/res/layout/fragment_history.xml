@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:paddingTop="16dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="복용 기록"
+            android:textColor="@color/text_primary"
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-medium" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="날짜별 복용 현황을 확인하세요"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- Calendar Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/white"
+            android:layout_marginTop="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Week Navigation -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageButton
+                        android:id="@+id/btn_prev_week"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/ic_arrow_left"
+                        android:background="@android:color/transparent" />
+
+                    <TextView
+                        android:id="@+id/tv_week_range"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="5월 17일 ~ 5월 23일"
+                        android:textColor="@color/text_primary"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center" />
+
+                    <ImageButton
+                        android:id="@+id/btn_next_week"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:background="@android:color/transparent" />
+
+                </LinearLayout>
+
+                <!-- Day Labels -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp">
+
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="일" android:textColor="@color/error" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="월" android:textColor="@color/text_secondary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="화" android:textColor="@color/text_secondary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="수" android:textColor="@color/text_secondary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="목" android:textColor="@color/text_secondary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="금" android:textColor="@color/text_secondary" android:textSize="12sp" android:gravity="center" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="토" android:textColor="@color/primary" android:textSize="12sp" android:gravity="center" />
+
+                </LinearLayout>
+
+                <!-- Date Numbers -->
+                <LinearLayout
+                    android:id="@+id/ll_dates"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <TextView android:id="@+id/tv_day0" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:gravity="center" android:textSize="15sp" android:textColor="@color/text_primary" />
+                    <TextView android:id="@+id/tv_day1" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:gravity="center" android:textSize="15sp" android:textColor="@color/text_primary" />
+                    <TextView android:id="@+id/tv_day2" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:gravity="center" android:textSize="15sp" android:textColor="@color/text_primary" />
+                    <TextView android:id="@+id/tv_day3" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:gravity="center" android:textSize="15sp" android:textColor="@color/text_primary" />
+                    <TextView android:id="@+id/tv_day4" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:gravity="center" android:textSize="15sp" android:textColor="@color/text_primary" />
+                    <TextView android:id="@+id/tv_day5" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:gravity="center" android:textSize="15sp" android:textColor="@color/text_primary" />
+                    <TextView android:id="@+id/tv_day6" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:gravity="center" android:textSize="15sp" android:textColor="@color/text_primary" />
+
+                </LinearLayout>
+
+                <!-- Dot indicators -->
+                <LinearLayout
+                    android:id="@+id/ll_dots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp">
+
+                    <View android:id="@+id/dot0" android:layout_width="0dp" android:layout_height="8dp" android:layout_weight="1" android:layout_marginHorizontal="12dp" android:background="@drawable/bg_circle_primary" android:visibility="invisible" />
+                    <View android:id="@+id/dot1" android:layout_width="0dp" android:layout_height="8dp" android:layout_weight="1" android:layout_marginHorizontal="12dp" android:background="@drawable/bg_circle_primary" android:visibility="invisible" />
+                    <View android:id="@+id/dot2" android:layout_width="0dp" android:layout_height="8dp" android:layout_weight="1" android:layout_marginHorizontal="12dp" android:background="@drawable/bg_circle_primary" android:visibility="invisible" />
+                    <View android:id="@+id/dot3" android:layout_width="0dp" android:layout_height="8dp" android:layout_weight="1" android:layout_marginHorizontal="12dp" android:background="@drawable/bg_circle_primary" android:visibility="invisible" />
+                    <View android:id="@+id/dot4" android:layout_width="0dp" android:layout_height="8dp" android:layout_weight="1" android:layout_marginHorizontal="12dp" android:background="@drawable/bg_circle_primary" android:visibility="invisible" />
+                    <View android:id="@+id/dot5" android:layout_width="0dp" android:layout_height="8dp" android:layout_weight="1" android:layout_marginHorizontal="12dp" android:background="@drawable/bg_circle_primary" android:visibility="invisible" />
+                    <View android:id="@+id/dot6" android:layout_width="0dp" android:layout_height="8dp" android:layout_weight="1" android:layout_marginHorizontal="12dp" android:background="@drawable/bg_circle_primary" android:visibility="invisible" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Today Record -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘 기록"
+            android:textColor="@color/text_primary"
+            android:textSize="17sp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="20dp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_today_record"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/white"
+            android:layout_marginTop="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Empty state -->
+                <LinearLayout
+                    android:id="@+id/ll_record_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_pill" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="이 날의 기록이 없어요"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="오늘부터 약 복용을 시작해보세요"
+                        android:textColor="@color/text_hint"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp" />
+
+                </LinearLayout>
+
+                <!-- Record list -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_record"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Weekly Stats -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이번 주 통계"
+            android:textColor="@color/text_primary"
+            android:textSize="17sp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="20dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/white"
+            android:layout_marginTop="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <!-- Perfect -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_perfect_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0일"
+                        android:textColor="@color/success"
+                        android:textSize="24sp"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="완벽 복용"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp" />
+
+                </LinearLayout>
+
+                <!-- Partial -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_partial_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0일"
+                        android:textColor="@color/warning"
+                        android:textSize="24sp"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="부분 복용"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp" />
+
+                </LinearLayout>
+
+                <!-- Missed -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_missed_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1일"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="24sp"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="미복용"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <View android:layout_width="match_parent" android:layout_height="80dp" />
+
+    </LinearLayout>
+</ScrollView>

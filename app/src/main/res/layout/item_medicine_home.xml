@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/white"
+    android:layout_marginBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp">
+
+        <!-- Checkbox -->
+        <CheckBox
+            android:id="@+id/cb_taken"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:button="@null"
+            android:background="@drawable/selector_checkbox"
+            android:layout_marginEnd="12dp" />
+
+        <!-- Medicine Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_medicine_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비타민 D"
+                android:textColor="@color/text_primary"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:id="@+id/tv_medicine_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🌅 아침"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+
+        <!-- Take Button -->
+        <Button
+            android:id="@+id/btn_take"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="복용"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:background="@drawable/bg_button_primary"
+            android:paddingHorizontal="16dp"
+            android:stateListAnimator="@null" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- White background circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,10 C30.2,10 10,30.2 10,54 C10,77.8 30.2,98 54,98 C77.8,98 98,77.8 98,54 C98,30.2 77.8,10 54,10 Z" />
+    
+    <!-- MS Logo representation in path (Simplified for icon) -->
+    <path
+        android:fillColor="#2D6A4F"
+        android:pathData="M35,35 L45,35 L54,50 L63,35 L73,35 L73,73 L63,73 L63,48 L54,63 L45,48 L45,73 L35,73 Z" />
+    <path
+        android:fillColor="#74C365"
+        android:pathData="M78,35 L88,35 L88,45 L78,45 Z M78,50 L88,50 L88,73 L78,73 Z" />
+</vector>
