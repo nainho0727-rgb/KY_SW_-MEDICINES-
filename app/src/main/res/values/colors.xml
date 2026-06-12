@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors -->
+    <color name="primary">#2D62ED</color>
+    <color name="primary_dark">#1A46C4</color>
+    <color name="primary_light">#EEF3FF</color>
+    <color name="primary_medium">#BFDBFE</color>
+
+    <!-- Accent -->
+    <color name="accent">#FFB74D</color>
+    <color name="accent_light">#FFF4E5</color>
+
+    <!-- Background -->
+    <color name="background">#F7F9FC</color>
+    <color name="background_light">#F8F9FA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="card_bg">#FFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#121212</color>
+    <color name="text_secondary">#6E7681</color>
+    <color name="text_hint">#ADB5BD</color>
+    <color name="text_white">#FFFFFF</color>
+
+    <!-- Status Colors -->
+    <color name="success">#37B24D</color>
+    <color name="warning">#F59E0B</color>
+    <color name="error">#FA5252</color>
+    <color name="info">#2D62ED</color>
+
+    <!-- Divider / Border -->
+    <color name="divider">#EDF0F3</color>
+    <color name="border">#E9ECEF</color>
+
+    <!-- Overlay -->
+    <color name="overlay">#66000000</color>
+
+    <!-- Bottom Nav -->
+    <color name="nav_selected">#2D62ED</color>
+    <color name="nav_unselected">#ADB5BD</color>
+
+    <!-- Time period colors -->
+    <color name="morning_color">#FF6B6B</color>
+    <color name="lunch_color">#FAB005</color>
+    <color name="evening_color">#7950F2</color>
+    <color name="bedtime_color">#228BE6</color>
+
+    <!-- Shadow & Interaction -->
+    <color name="shadow">#0F000000</color>
+    <color name="ripple_light">#10000000</color>
+
+    <!-- Transparent -->
+    <color name="transparent">#00000000</color>
+
+    <!-- Material -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

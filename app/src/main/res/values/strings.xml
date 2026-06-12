@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MEDICINES</string>
+
+    <!-- Splash -->
+    <string name="splash_tagline">건강한 하루를 위한 스마트 약 관리</string>
+
+    <!-- Login -->
+    <string name="login_title">로그인</string>
+    <string name="login_subtitle">MEDICINES에 오신 것을 환영합니다</string>
+    <string name="hint_nickname">닉네임</string>
+    <string name="hint_phone">전화번호 (예: 010-1234-5678)</string>
+    <string name="btn_login">로그인</string>
+    <string name="go_register">계정이 없으신가요? 회원가입</string>
+
+    <!-- Register -->
+    <string name="register_title">회원가입</string>
+    <string name="step_gender">성별 선택</string>
+    <string name="step_nickname">닉네임</string>
+    <string name="step_name">이름</string>
+    <string name="step_birthday">생년월일</string>
+    <string name="step_phone">전화번호</string>
+    <string name="btn_next">다음</string>
+    <string name="btn_complete">가입 완료</string>
+    <string name="gender_male">남성</string>
+    <string name="gender_female">여성</string>
+    <string name="hint_name">이름을 입력하세요</string>
+    <string name="hint_birthday">생년월일 (예: 1990-01-01)</string>
+    <string name="register_success">회원가입이 완료되었습니다!</string>
+
+    <!-- Bottom Nav -->
+    <string name="nav_home">홈</string>
+    <string name="nav_medicine">내약</string>
+    <string name="nav_history">기록</string>
+    <string name="nav_ai">AI</string>
+    <string name="nav_profile">프로필</string>
+
+    <!-- Home -->
+    <string name="home_greeting">좋은 아침이에요 🌅</string>
+    <string name="today_medicine">오늘의 약 복용</string>
+    <string name="today_status">오늘 복용 현황</string>
+    <string name="next_schedule">다음 복용 예정</string>
+    <string name="today_list">오늘의 약 목록</string>
+    <string name="btn_take">복용</string>
+    <string name="taken">복용 완료</string>
+    <string name="no_medicine_today">오늘 복용할 약이 없어요</string>
+
+    <!-- My Medicine -->
+    <string name="my_medicine_title">내 약</string>
+    <string name="total_registered">총 %d개 등록됨</string>
+    <string name="btn_add_medicine">+ 약 추가</string>
+    <string name="morning">아침</string>
+    <string name="lunch">점심</string>
+    <string name="evening">저녁</string>
+    <string name="bedtime">취침 전</string>
+    <string name="no_medicine">등록된 약이 없어요</string>
+    <string name="add_medicine_title">약 추가</string>
+    <string name="hint_medicine_name">약 이름</string>
+    <string name="hint_medicine_dose">복용량 (예: 1정)</string>
+    <string name="hint_medicine_memo">메모 (선택사항)</string>
+    <string name="select_time">복용 시간 선택</string>
+    <string name="btn_save">저장</string>
+    <string name="delete_confirm">이 약을 삭제하시겠습니까?</string>
+    <string name="btn_delete">삭제</string>
+    <string name="btn_cancel">취소</string>
+
+    <!-- History -->
+    <string name="history_title">복용 기록</string>
+    <string name="history_subtitle">날짜별 복용 현황을 확인하세요</string>
+    <string name="today_record">오늘 기록</string>
+    <string name="weekly_stats">이번 주 통계</string>
+    <string name="perfect_dose">완벽 복용</string>
+    <string name="partial_dose">부분 복용</string>
+    <string name="missed_dose">미복용</string>
+    <string name="no_record">이 날의 기록이 없어요</string>
+    <string name="no_record_sub">오늘부터 약 복용을 시작해보세요</string>
+
+    <!-- AI -->
+    <string name="ai_title">AI 약 도우미</string>
+    <string name="ai_online">온라인</string>
+    <string name="ai_welcome">안녕하세요! 저는 MEDICINES 약 복용 도우미예요 💊\n\n약 복용 정보, 부작용, 상호작용 등 궁금한 점을 물어보세요. 아래 빠른 질문 버튼을 눌러도 되어요!</string>
+    <string name="ai_hint">약에 대해 궁금한 점을 물어보세요…</string>
+    <string name="quick_q1">오늘 약 복용 현황 알려줘</string>
+    <string name="quick_q2">타이레놀 부작용이 뭐야?</string>
+    <string name="quick_q3">약 복용 시간 추천</string>
+
+    <!-- Profile -->
+    <string name="profile_title">프로필</string>
+    <string name="medicines_user">MEDICINES 사용자</string>
+    <string name="phone_number">전화번호</string>
+    <string name="join_date">가입일</string>
+    <string name="settings">설정</string>
+    <string name="account_settings">계정 설정</string>
+    <string name="logout">로그아웃</string>
+    <string name="logout_confirm">로그아웃 하시겠습니까?</string>
+
+    <!-- OCR -->
+    <string name="ocr_title">약 라벨 스캔</string>
+    <string name="ocr_subtitle">카메라로 약 라벨을 촬영하면 약 이름을 자동으로 인식합니다</string>
+    <string name="btn_capture">촬영</string>
+    <string name="ocr_result_title">인식 결과</string>
+    <string name="btn_copy">복사</string>
+    <string name="btn_add_to_medicine">약 추가에 사용</string>
+    <string name="ocr_analyzing">분석 중...</string>
+    <string name="copied">클립보드에 복사되었습니다</string>
+
+    <!-- Common -->
+    <string name="loading">로딩 중...</string>
+    <string name="error_network">네트워크 오류가 발생했습니다</string>
+    <string name="error_empty_field">모든 항목을 입력해주세요</string>
+    <string name="user_not_found">사용자를 찾을 수 없습니다</string>
+    <string name="save_success">저장되었습니다</string>
+    <string name="delete_success">삭제되었습니다</string>
+    <string name="take_success">복용 완료!</string>
+    <string name="days_unit">일</string>
+</resources>
