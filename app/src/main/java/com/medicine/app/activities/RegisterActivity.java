@@ -115,8 +115,45 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         btnComplete.setEnabled(false);
-        btnComplete.setText("처리 중...");
+        btnComplete.setText("확인 중...");
 
+        final String fNickname = nickname, fName = name, fPhone = phone, fBirthday = birthday;
+
+        // 1) 닉네임 중복 확인 → 2) 전화번호 중복 확인 → 3) 통과 시 가입
+        db.collection("users").whereEqualTo("nickname", fNickname).limit(1).get()
+            .addOnSuccessListener(nickSnap -> {
+                if (!nickSnap.isEmpty()) {
+                    resetCompleteButton();
+                    Toast.makeText(this, "이미 사용 중인 닉네임입니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                db.collection("users").whereEqualTo("phone", fPhone).limit(1).get()
+                    .addOnSuccessListener(phoneSnap -> {
+                        if (!phoneSnap.isEmpty()) {
+                            resetCompleteButton();
+                            Toast.makeText(this, "이미 가입된 전화번호입니다.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        registerUser(fNickname, fName, fPhone, fBirthday);
+                    })
+                    .addOnFailureListener(e -> {
+                        resetCompleteButton();
+                        Toast.makeText(this, "중복 확인 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+            })
+            .addOnFailureListener(e -> {
+                resetCompleteButton();
+                Toast.makeText(this, "중복 확인 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+    }
+
+    private void resetCompleteButton() {
+        btnComplete.setEnabled(true);
+        btnComplete.setText("회원가입 완료");
+    }
+
+    private void registerUser(String nickname, String name, String phone, String birthday) {
+        btnComplete.setText("처리 중...");
         String joinDate = new SimpleDateFormat("yyyy년 M월 d일", Locale.KOREAN).format(new Date());
 
         Map<String, Object> user = new HashMap<>();
@@ -151,8 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             })
             .addOnFailureListener(e -> {
-                btnComplete.setEnabled(true);
-                btnComplete.setText("회원가입 완료");
+                resetCompleteButton();
                 Toast.makeText(this, "오류: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             });
     }

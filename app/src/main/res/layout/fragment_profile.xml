@@ -74,14 +74,6 @@
 
                 </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/btn_edit_profile"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/ic_edit"
-                    android:background="@android:color/transparent"
-                    android:padding="6dp" />
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

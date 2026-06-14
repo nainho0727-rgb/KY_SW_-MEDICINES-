@@ -46,6 +46,13 @@ import static android.content.Context.MODE_PRIVATE;
 public class AIFragment extends Fragment {
 
     private static final String TAG = "AIFragment";
+    /** 사용 모델 우선순위. 한도(429)에 막히면 다음 모델(별도 무료 할당량 버킷)로 자동 전환.
+     *  2.0 계열은 이 키에서 limit=0 이라 제외. */
+    private static final String[] MODELS = {
+            "gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-flash-latest"
+    };
+    /** 일시적 503 시 같은 모델 재시도 횟수. */
+    private static final int MAX_RETRIES = 2;
     private RecyclerView rvChat;
     private EditText etMessage;
     private View btnSend;
@@ -55,8 +62,9 @@ public class AIFragment extends Fragment {
     private String userId;
     private String todayDate;
     
-    private GenerativeModelFutures model;
     private Executor executor = Executors.newSingleThreadExecutor();
+    /** 직전에 성공한 모델 인덱스. 한도로 막힌 모델을 매번 다시 찌르지 않도록 여기서 시작. */
+    private volatile int preferredModelIndex = 0;
 
     @Nullable
     @Override
@@ -67,10 +75,6 @@ public class AIFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        // Gemini 모델 초기화
-        GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", BuildConfig.GEMINI_API_KEY);
-        model = GenerativeModelFutures.from(gm);
 
         db = FirebaseFirestore.getInstance();
         SharedPreferences prefs = requireActivity().getSharedPreferences("medicine_prefs", MODE_PRIVATE);
@@ -254,6 +258,13 @@ public class AIFragment extends Fragment {
     }
 
     private void callGeminiApi(String userQuery, String context) {
+        callGeminiApi(userQuery, context, 0, preferredModelIndex);
+    }
+
+    private void callGeminiApi(String userQuery, String context, int attempt, int modelIndex) {
+        GenerativeModelFutures model = GenerativeModelFutures.from(new GenerativeModel(
+                MODELS[Math.min(modelIndex, MODELS.length - 1)], BuildConfig.GEMINI_API_KEY));
+
         String systemPrompt = "당신은 'MEDICINES'라는 약 복용 관리 앱의 친절한 AI 도우미입니다. " +
                 "사용자의 질문에 답변할 때 다음 지침을 따르세요:\n" +
                 "1. 제공된 복약 현황 데이터가 있다면 이를 바탕으로 정확하게 답변하세요.\n" +
@@ -276,21 +287,92 @@ public class AIFragment extends Fragment {
         Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
             @Override
             public void onSuccess(GenerateContentResponse result) {
+                preferredModelIndex = modelIndex; // 이 모델이 성공 → 다음부터 여기서 시작
                 String text = result.getText();
-                requireActivity().runOnUiThread(() -> {
+                runOnUi(() -> {
                     removeLoadingMessage();
-                    addAIMessage(text);
+                    addAIMessage(TextUtils.isEmpty(text)
+                            ? "응답을 받지 못했어요. 잠시 후 다시 시도해주세요." : text);
                 });
             }
 
             @Override
-            public void onFailure(Throwable t) {
-                Log.e(TAG, "Gemini API Error", t);
-                requireActivity().runOnUiThread(() -> {
+            public void onFailure(@NonNull Throwable t) {
+                Log.e(TAG, "Gemini API Error (model=" + modelIndex + ", attempt " + attempt + ")", t);
+                boolean hasNextModel = modelIndex + 1 < MODELS.length;
+                // 1) 한도(429): 같은 모델 재시도는 의미 없으니 다음 모델 버킷으로 즉시 전환
+                if (isQuota(t) && hasNextModel) {
+                    runOnUi(() -> {
+                        if (rvChat != null) rvChat.post(
+                                () -> callGeminiApi(userQuery, context, 0, modelIndex + 1));
+                    });
+                    return;
+                }
+                // 2) 일시적 과부하(503): 같은 모델 백오프 재시도(로딩 유지)
+                if (!isQuota(t) && isRetryable(t) && attempt < MAX_RETRIES) {
+                    long delayMs = 1500L * (attempt + 1); // 1.5s → 3s
+                    runOnUi(() -> {
+                        if (rvChat != null) rvChat.postDelayed(
+                                () -> callGeminiApi(userQuery, context, attempt + 1, modelIndex), delayMs);
+                    });
+                    return;
+                }
+                // 3) 재시도 소진 → 남은 다른 모델이 있으면 전환
+                if (hasNextModel) {
+                    runOnUi(() -> {
+                        if (rvChat != null) rvChat.post(
+                                () -> callGeminiApi(userQuery, context, 0, modelIndex + 1));
+                    });
+                    return;
+                }
+                // 4) 모든 모델 실패 → 안내
+                runOnUi(() -> {
                     removeLoadingMessage();
-                    addAIMessage("죄송합니다. AI 응답을 가져오는 중 오류가 발생했습니다: " + t.getMessage());
+                    addAIMessage(friendlyError(t));
                 });
             }
         }, executor);
+    }
+
+    /** 사용량 한도(429/RESOURCE_EXHAUSTED) 오류인지. */
+    private boolean isQuota(Throwable t) {
+        String m = (t == null || t.getMessage() == null) ? "" : t.getMessage().toLowerCase(Locale.ROOT);
+        return m.contains("429") || m.contains("resource_exhausted") || m.contains("quota");
+    }
+
+    /** Fragment 가 화면에 붙어 있을 때만 UI 작업 실행(detach 중 크래시 방지). */
+    private void runOnUi(Runnable r) {
+        if (!isAdded()) return;
+        androidx.fragment.app.FragmentActivity act = getActivity();
+        if (act != null) act.runOnUiThread(r);
+    }
+
+    /**
+     * 서버 과부하/일시적 오류면 재시도 대상.
+     * SDK 가 503 응답을 제대로 파싱 못 해 MissingFieldException 으로 던지는 케이스도 포함.
+     */
+    private boolean isRetryable(Throwable t) {
+        String m = (t == null || t.getMessage() == null) ? "" : t.getMessage().toLowerCase(Locale.ROOT);
+        return m.contains("503") || m.contains("unavailable") || m.contains("high demand")
+                || m.contains("overload") || m.contains("500") || m.contains("internal")
+                || m.contains("timeout") || m.contains("deadline")
+                || m.contains("missingfield") || m.contains("unexpected response");
+    }
+
+    /** 사용자에게 보여줄 깔끔한 안내 문구(원시 JSON/스택트레이스 노출 방지). */
+    private String friendlyError(Throwable t) {
+        String m = (t == null || t.getMessage() == null) ? "" : t.getMessage().toLowerCase(Locale.ROOT);
+        if (m.contains("429") || m.contains("resource_exhausted") || m.contains("quota")) {
+            return "오늘 무료 AI 사용량 한도에 도달했어요. 잠시 후 다시 시도해주세요.";
+        }
+        if (m.contains("503") || m.contains("unavailable") || m.contains("high demand")
+                || m.contains("overload") || m.contains("missingfield")) {
+            return "AI 서버가 잠시 혼잡해요(일시적 과부하). 잠시 후 다시 시도해주세요. 🙏";
+        }
+        if (m.contains("unable to resolve host") || m.contains("network")
+                || m.contains("timeout") || m.contains("deadline")) {
+            return "네트워크 연결이 불안정해요. 인터넷 상태를 확인하고 다시 시도해주세요.";
+        }
+        return "죄송합니다. 답변을 가져오지 못했어요. 잠시 후 다시 시도해주세요.";
     }
 }

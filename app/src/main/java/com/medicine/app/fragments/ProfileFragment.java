@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +30,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class ProfileFragment extends Fragment {
 
     private TextView tvNickname, tvPhone, tvJoinDate;
-    private ImageButton btnEditProfile;
     private LinearLayout btnAccountSettings, btnLogout;
     private FirebaseFirestore db;
     private String userId, nickname, phone, joinDate;
@@ -56,7 +54,6 @@ public class ProfileFragment extends Fragment {
         tvNickname = view.findViewById(R.id.tv_nickname);
         tvPhone = view.findViewById(R.id.tv_phone);
         tvJoinDate = view.findViewById(R.id.tv_join_date);
-        btnEditProfile = view.findViewById(R.id.btn_edit_profile);
         btnAccountSettings = view.findViewById(R.id.btn_account_settings);
         btnLogout = view.findViewById(R.id.btn_logout);
 
@@ -64,9 +61,8 @@ public class ProfileFragment extends Fragment {
         tvPhone.setText(phone.isEmpty() ? "전화번호 없음" : phone);
         tvJoinDate.setText(joinDate.isEmpty() ? "가입일 없음" : joinDate);
 
-        btnEditProfile.setOnClickListener(v -> showEditProfileDialog());
-
-        btnAccountSettings.setOnClickListener(v -> showAccountSettingsDialog());
+        // 계정 설정 = 프로필 수정 (연필 아이콘 대체)
+        btnAccountSettings.setOnClickListener(v -> showEditProfileDialog());
 
         btnLogout.setOnClickListener(v -> confirmLogout());
     }
@@ -135,17 +131,6 @@ public class ProfileFragment extends Fragment {
         });
 
         dialog.show();
-    }
-
-    private void showAccountSettingsDialog() {
-        if (getContext() == null) return;
-
-        new AlertDialog.Builder(getContext())
-            .setTitle("계정 설정")
-            .setMessage("계정 관련 설정을 선택하세요")
-            .setPositiveButton("프로필 수정", (dialog, which) -> showEditProfileDialog())
-            .setNegativeButton("닫기", null)
-            .show();
     }
 
     private void confirmLogout() {

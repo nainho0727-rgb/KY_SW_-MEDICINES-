@@ -39,6 +39,8 @@
                 android:id="@+id/et_edit_nickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_hint"
                 android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -58,6 +60,8 @@
                 android:id="@+id/et_edit_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_hint"
                 android:inputType="number"
                 android:maxLength="11"
                 android:digits="0123456789" />
@@ -75,8 +79,8 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:text="취소"
-                android:textColor="@color/primary"
-                android:background="@drawable/bg_button_outline"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_button_secondary"
                 android:layout_marginEnd="8dp"
                 android:stateListAnimator="@null" />
 

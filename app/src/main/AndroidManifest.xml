@@ -66,6 +66,17 @@
             android:enabled="true"
             android:exported="false" />
 
+        <!-- Boot Receiver: 재부팅 후 알람 재등록 -->
+        <receiver
+            android:name=".receivers.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

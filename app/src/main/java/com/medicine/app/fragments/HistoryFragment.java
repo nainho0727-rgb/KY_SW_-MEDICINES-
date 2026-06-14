@@ -2,6 +2,7 @@ package com.medicine.app.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -196,26 +197,42 @@ public class HistoryFragment extends Fragment {
 
                 final int finalTarget = dailyTotalTarget;
 
-                // 2. 이번 주 기록 가져오기
+                // 등록된 약이 하나도 없으면 챙길 것도 없으므로 통계는 모두 0.
+                if (finalTarget == 0) {
+                    tvPerfectCount.setText("0일");
+                    tvPartialCount.setText("0일");
+                    tvMissedCount.setText("0일");
+                    for (int i = 0; i < 7; i++) dots[i].setVisibility(View.INVISIBLE);
+                    return;
+                }
+
+                // 2. 이번 주 범위 계산
                 Calendar weekEnd = (Calendar) currentWeekStart.clone();
                 weekEnd.add(Calendar.DAY_OF_YEAR, 6);
                 SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                String startStr = fmt.format(currentWeekStart.getTime());
-                String endStr = fmt.format(weekEnd.getTime());
+                final String startStr = fmt.format(currentWeekStart.getTime());
+                final String endStr = fmt.format(weekEnd.getTime());
+                final String todayStr = fmt.format(Calendar.getInstance().getTime());
 
+                // userId 로만 조회(복합 색인 불필요) → 날짜 필터는 코드에서 처리
                 db.collection("records")
                     .whereEqualTo("userId", userId)
-                    .whereGreaterThanOrEqualTo("date", startStr)
-                    .whereLessThanOrEqualTo("date", endStr)
                     .get()
                     .addOnSuccessListener(recordSnapshots -> {
                         Map<String, Integer> dailyTakenCount = new HashMap<>();
+                        String firstRecordDate = null; // 사용자가 복약을 처음 시작한 날(통계 시작 기준)
                         for (QueryDocumentSnapshot doc : recordSnapshots) {
                             String date = doc.getString("date");
-                            if (date != null) {
+                            if (date == null) continue;
+                            if (firstRecordDate == null || date.compareTo(firstRecordDate) < 0) {
+                                firstRecordDate = date;
+                            }
+                            // 이번 주(startStr ~ endStr) 범위만 집계
+                            if (date.compareTo(startStr) >= 0 && date.compareTo(endStr) <= 0) {
                                 dailyTakenCount.put(date, dailyTakenCount.getOrDefault(date, 0) + 1);
                             }
                         }
+                        final String startBoundary = firstRecordDate;
 
                         int perfectDays = 0;
                         int partialDays = 0;
@@ -225,25 +242,31 @@ public class HistoryFragment extends Fragment {
                             Calendar day = (Calendar) currentWeekStart.clone();
                             day.add(Calendar.DAY_OF_YEAR, i);
                             String dayStr = fmt.format(day.getTime());
-                            
+
                             int taken = dailyTakenCount.getOrDefault(dayStr, 0);
-                            
-                            if (finalTarget > 0) {
-                                if (taken >= finalTarget) perfectDays++;
-                                else if (taken > 0) partialDays++;
-                                else missedDays++;
-                            } else {
-                                missedDays++;
-                            }
 
                             // 점 표시 (하나라도 먹었으면 표시)
                             dots[i].setVisibility(taken > 0 ? View.VISIBLE : View.INVISIBLE);
+
+                            // 아직 오지 않은 미래 날짜는 제외
+                            if (dayStr.compareTo(todayStr) > 0) continue;
+                            // 복약을 처음 시작하기 전 날짜는 제외(기록이 아예 없던 기간은 미복용으로 안 셈)
+                            if (startBoundary == null || dayStr.compareTo(startBoundary) < 0) continue;
+
+                            if (finalTarget > 0 && taken >= finalTarget) perfectDays++;
+                            else if (taken > 0) partialDays++;
+                            // 오늘은 아직 진행 중이라 미복용으로 세지 않음(지난 날만 미복용 집계)
+                            else if (!dayStr.equals(todayStr)) missedDays++;
                         }
 
                         tvPerfectCount.setText(perfectDays + "일");
                         tvPartialCount.setText(partialDays + "일");
                         tvMissedCount.setText(missedDays + "일");
-                    });
-            });
+                    })
+                    .addOnFailureListener(e ->
+                            Log.e("HistoryFragment", "주간 통계 기록 조회 실패", e));
+            })
+            .addOnFailureListener(e ->
+                    Log.e("HistoryFragment", "주간 통계 약 조회 실패", e));
     }
 }
