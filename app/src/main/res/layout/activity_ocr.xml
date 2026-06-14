@@ -55,21 +55,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Scan overlay -->
+    <!-- Scan overlay (가이드 텍스트 기준점 역할만; 가짜 박스는 표시하지 않음) -->
     <View
         android:id="@+id/scan_overlay"
         android:layout_width="280dp"
         android:layout_height="160dp"
-        android:background="@drawable/bg_scan_overlay"
+        app:layout_constraintTop_toBottomOf="@id/ll_toolbar"
+        app:layout_constraintBottom_toTopOf="@id/ll_bottom_controls"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 촬영 후 정지 화면 + 조절 가능한 크롭 박스 -->
+    <com.medicine.app.views.CropOverlayView
+        android:id="@+id/crop_overlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/ll_toolbar"
         app:layout_constraintBottom_toTopOf="@id/ll_bottom_controls"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
+        android:id="@+id/tv_scan_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="처방전이나 약 라벨을 박스 안에 맞춰주세요"
+        android:text="약봉투 전체가 화면에 보이도록 맞춰주세요"
         android:textColor="@color/white"
         android:textSize="13sp"
         android:background="#80000000"
@@ -138,8 +149,7 @@
                     android:id="@+id/tv_ocr_result"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="5"
-                    android:ellipsize="end"
+                    android:maxLines="12"
                     android:text=""
                     android:textColor="@color/text_primary"
                     android:textSize="14sp"
@@ -150,7 +160,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_marginTop="12dp"
-                    android:text="✨ AI 응답"
+                    android:text="✅ 이 약들 등록하기"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:background="@drawable/bg_button_primary"
@@ -158,6 +168,18 @@
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <!-- 다시 촬영 (크롭 단계에서만 표시) -->
+        <Button
+            android:id="@+id/btn_retake"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="↩  다시 촬영"
+            android:textColor="@color/primary"
+            android:textSize="15sp"
+            android:background="@android:color/transparent"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp" />
 
         <!-- Capture Button -->
         <Button

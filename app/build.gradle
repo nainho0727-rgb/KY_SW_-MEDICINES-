@@ -90,7 +90,9 @@ dependencies {
     implementation 'com.airbnb.android:lottie:6.3.0'
 
     // Google Generative AI SDK
-    implementation 'com.google.ai.client.generativeai:generativeai:0.2.0'
+    // 0.2.0 은 gemini-2.5 응답의 새 필드를 파싱하지 못해 generateContent 가 항상 실패함
+    // (kotlinx 직렬화 ignoreUnknownKeys 미설정). 0.9.0 에서 해결됨.
+    implementation 'com.google.ai.client.generativeai:generativeai:0.9.0'
 
     // Guava (for Java compatibility with Generative AI SDK)
     implementation 'com.google.guava:guava:31.1-android'

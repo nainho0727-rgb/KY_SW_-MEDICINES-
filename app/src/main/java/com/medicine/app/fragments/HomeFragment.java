@@ -36,6 +36,7 @@ import com.medicine.app.R;
 import com.medicine.app.adapters.HomeMedicineAdapter;
 import com.medicine.app.models.Medicine;
 import com.medicine.app.receivers.NotificationReceiver;
+import com.medicine.app.utils.AlarmTimeSettings;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -116,7 +117,8 @@ public class HomeFragment extends Fragment {
         rvTodayMedicines.setLayoutManager(new LinearLayoutManager(getContext()));
         rvTodayMedicines.setAdapter(adapter);
 
-        btnNotification.setOnClickListener(v -> showNotificationSettings());
+        // 내 약 화면과 동일한 '복용 알림 시간 설정'을 연다.
+        btnNotification.setOnClickListener(v -> AlarmTimeSettings.show(getContext(), db, userId));
 
         loadTodayMedicines();
     }
@@ -306,10 +308,14 @@ public class HomeFragment extends Fragment {
     }
 
     private void checkTakenStatus(Medicine medicine) {
+        // 같은 약이라도 시간대(timeSlot)별로 복용 여부가 독립적이어야 한다.
+        // timeSlot 필터가 없으면 아침을 먹었을 때 저녁까지 '복용함'으로 잘못 표시됨.
+        String slot = medicine.getTimeSlots().isEmpty() ? "" : medicine.getTimeSlots().get(0);
         db.collection("records")
             .whereEqualTo("userId", userId)
             .whereEqualTo("medicineId", medicine.getId())
             .whereEqualTo("date", todayDate)
+            .whereEqualTo("timeSlot", slot)
             .get()
             .addOnSuccessListener(snap -> {
                 if (!snap.isEmpty()) {
@@ -336,12 +342,16 @@ public class HomeFragment extends Fragment {
 
         adapter.updateList(new ArrayList<>(medicineList));
 
-        // Update next schedule
+        // Update next schedule: 미복용 중 시간대가 가장 이른 약을 '다음 복용 예정'으로
         Medicine nextMedicine = null;
+        int bestOrder = Integer.MAX_VALUE;
         for (Medicine m : medicineList) {
-            if (!m.isTaken()) {
+            if (m.isTaken()) continue;
+            String slot = m.getTimeSlots().isEmpty() ? "" : m.getTimeSlots().get(0);
+            int order = slotOrder(slot);
+            if (order < bestOrder) {
+                bestOrder = order;
                 nextMedicine = m;
-                break;
             }
         }
 
@@ -362,6 +372,18 @@ public class HomeFragment extends Fragment {
         } else {
             llEmpty.setVisibility(View.GONE);
             rvTodayMedicines.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /** 시간대 정렬 순서(아침→점심→저녁→취침). */
+    private int slotOrder(String slot) {
+        if (slot == null) return 9;
+        switch (slot) {
+            case "morning": return 0;
+            case "lunch":   return 1;
+            case "evening": return 2;
+            case "bedtime": return 3;
+            default:        return 9;
         }
     }
 

@@ -140,9 +140,9 @@
             android:layout_height="56dp"
             android:layout_marginTop="16dp"
             android:text="회원가입"
-            android:textColor="#64748B"
+            android:textColor="@color/white"
             android:textSize="15sp"
-            android:background="@drawable/bg_button_outline"
+            android:background="@drawable/bg_button_primary"
             android:stateListAnimator="@null"
             app:layout_constraintTop_toBottomOf="@id/card_login" />
 
